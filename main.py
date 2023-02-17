@@ -3,6 +3,7 @@ from Grammar import Grammars
 class Main:
 
     def __init__(self):
+        # Initialize the class with a set of productions for a context-free grammar
         self.productions = {
             'S': ['aB'],
             'B': ['aD','bB','cS'],
@@ -10,19 +11,19 @@ class Main:
         }
         self.start_symbol = 'S'
         self.grammar = Grammars(self.productions, self.start_symbol)
-        self.finite_automaton = self.grammar.to_finite_automaton()
+        self.finite_automaton = self.grammar.create_finite_automaton()
         self.automaton = FiniteAutomaton
 
-    def generate_strings(self, num_strings):
-        for i in range(num_strings):
-            string = self.grammar.generate_string()
-
+    # Define a function to generate strings from the grammar
+    def Create_string(self, n):
+        for i in range(n):
+            string = self.grammar.create_string()
             print(string)
 
 if __name__ == '__main__':
     main = Main()
-    main.generate_strings(6)
-    automatons = main.grammar.to_finite_automaton()
+    main.Create_string(6)
+    automatons = main.grammar.create_finite_automaton()
     automaton = {
         'states': {'q0', 'q1', 'q2', 'q3', 'q4', 'q5'},
         'alphabet': {'a', 'b', 'c'},
@@ -37,7 +38,7 @@ if __name__ == '__main__':
         'start_state': 'q0',
         'final_states': {'q3', 'q5'}
     }
-    checker = FiniteAutomaton(automaton)
-    checker.check_strings(['aca', 'abaca', 'ababaa', 'aa', 'abababa','acacacacacaca','baba'])
-    print(automatons)
+    verification = FiniteAutomaton(automaton)
+    verification.verify_strings(['aca', 'abaca', 'ababaa', 'aa', 'abababa', 'acacacacacaca', 'baba'])
+    print('Automaton:' , automatons)
 
