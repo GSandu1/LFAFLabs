@@ -15,10 +15,9 @@ class Automaton:
             ('q1', 'b'): {'q3'},
             ('q2', 'a'): {'q2'},
             ('q2', 'b'): {'q3'}
-        }
+        }  # Dictionary of transition function mappings
 
     def is_deterministic(self):
-        # Checks if the automaton is deterministic
         for state in self.states:
             for symbol in self.alphabet:
                 next_states = self.transitions.get((state, symbol), set())
@@ -27,7 +26,6 @@ class Automaton:
         return True
 
     def to_dfa(self):
-        # Converts the automaton to a deterministic finite automaton (DFA)
         if self.is_deterministic():
             return self
 
@@ -59,8 +57,6 @@ class Automaton:
     def to_grammar(self):
         productions = dict()
 
-        # For each state and symbol in the automaton's transitions,
-        # create a production for each possible next state.
         for state in self.states:
             for symbol in self.alphabet:
                 next_states = self.transitions.get((state, symbol), set())
@@ -72,17 +68,12 @@ class Automaton:
                             productions[state] = set()
                         productions[state].add(symbol)
                     else:
-                        # If the next state is not an accept state, add a production
-                        # that generates the symbol concatenated with the next state.
                         if next_state not in productions:
                             productions[next_state] = set()
                         productions[next_state].add(symbol + state)
 
-        # Set the start symbol to be the start state of the automaton.
         start_symbol = self.start_state
         if start_symbol in productions:
-            # If there is already a production for the start symbol, rename it to "S"
-            # and add new productions that use "S" instead of the start symbol.
             productions['S'] = productions[start_symbol]
             del productions[start_symbol]
             for state in self.states:
@@ -94,21 +85,16 @@ class Automaton:
                                 productions[next_state] = set()
                             productions[next_state].add(symbol + 'S')
         else:
-            # If there is no production for the start symbol, create one that generates
-            # the empty string and concatenates it with each accept state.
             start_symbol = 'S'
             productions[start_symbol] = set()
             for accept_state in self.accept_states:
                 productions[start_symbol].add('eps' + accept_state)
 
-        # Return the start symbol and the productions.
         return start_symbol, productions
 
     def render(self):
-        # Create a directed graph using networkx
         G = nx.DiGraph()
 
-        # Add nodes to the graph
         for state in self.states:
             G.add_node(state, shape='circle')
         G.nodes[self.start_state]['shape'] = 'doublecircle'
@@ -120,10 +106,8 @@ class Automaton:
             for to_state in to_states:
                 G.add_edge(from_state, to_state, label=symbol)
 
-        # Set up positions for the nodes using networkx spring_layout
         pos = nx.spring_layout(G, seed=42)
 
-        # Draw the graph using matplotlib
         nx.draw_networkx_nodes(G, pos, node_size=1000, alpha=0.8)
         nx.draw_networkx_edges(G, pos, width=2, alpha=0.8)
         nx.draw_networkx_labels(G, pos, font_size=18, font_family='sans-serif')
