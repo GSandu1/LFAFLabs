@@ -1,17 +1,23 @@
 import matplotlib.pyplot as plt
 import networkx as nx
+import unittest
 from Automaton import Automaton
 from FiniteAutomaton import FiniteAutomaton
 from Grammar import Grammars
 from lexer import MathLexer
+from ChomskyConverter import CNFConverter
+from UnitTester import UnitTester
 class Main:
+    print('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+    print('                                                                                     LAB1')
+    print('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
     # Initialize the Main class by setting up a grammar,
     def __init__(self):
         self.productions = {
-            'S': ['aA', 'aB'],
-            'A': ['bS'],
-            'B': ['aC'],
-            'C': ['a', 'bS'],
+            'S': ['aA'],
+            'B': ['aD','bB','cS'],
+            'B': ['aD','bS','c'],
+
         }
         self.start_symbol = 'S'
         self.grammar = Grammars(self.productions, self.start_symbol)
@@ -88,10 +94,51 @@ grammar = automation.to_grammar()
 print(f"Regular grammar productions: {grammar}")
 print(main.grammar.chomsky_classification())
 automation.render()
-
-print('-------------------------------------------------------------------LAB3-------------------------------------------------------------------------')
+print('')
+print('')
+print('')
+print('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+print('                                                                                     LAB3')
+print('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
 
 lexer = MathLexer()
 tokens = lexer.tokenize("2 + 3 * (4 - 1)")
 print(tokens)
+print('')
+print('')
+print('')
+print('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+print('                                                                                     LAB4')
+print('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+print('')
+VN = {'S', 'A', 'B', 'C', 'D'}
+VI = {'a', 'b'}
+P = [
+    ('S', ('a', 'B')),
+    ('S', ('D', 'A')),
+    ('A', ('a',)),
+    ('A', ('B','D')),
+    ('A', ('b', 'D','A','B')),
+    ('B', ('b',)),
+    ('B', ('B', 'A')),
+    ('D', ()),
+    ('D', ('B', 'A')),
+    ('C', ('B', 'A')),
 
+]
+S = 'S'
+grammar = (VN, VI, P, S)
+
+# Convert the grammar to Chomsky normal form
+cnf_converter = CNFConverter(grammar)
+cnf_grammar = cnf_converter.convert_to_cnf()
+
+# Print the resulting grammar
+print('Original grammar:')
+print(grammar)
+print('Grammar in Chomsky normal form:')
+print(cnf_grammar)
+
+print("All Tests Passed")
+unittest.main()
+print('')
