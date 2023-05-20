@@ -1,5 +1,5 @@
 import unittest
-from ChomskyConverter import CNFConverter
+from Chomsky.ChomskyConverter import CNFConverter
 
 class UnitTester(unittest.TestCase):
 
